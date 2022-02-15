@@ -1,0 +1,6 @@
+boto3
+grpcio
+grpcio-tools
+opencv-python~=4.5.5.62
+pillow~=9.0.1
+numpy~=1.22.2

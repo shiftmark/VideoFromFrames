@@ -1,0 +1,16 @@
+//to recompile this proto run
+//python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/imgstream.proto
+syntax = "proto3";
+
+service ImgStream {
+    rpc stream (Req) returns (Res) {}
+}
+
+message Req {
+    int32 img_id = 1;
+}
+
+message Res {
+    int32 img_id = 1;
+    bytes img_data = 2;
+}
