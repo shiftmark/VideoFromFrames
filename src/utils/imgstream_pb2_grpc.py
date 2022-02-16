@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import imgstream_pb2 as imgstream__pb2
+from utils import imgstream_pb2 as imgstream__pb2
 
 
 class ImgStreamStub(object):

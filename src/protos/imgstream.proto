@@ -1,4 +1,4 @@
-//to recompile this proto run
+//to recompile this proto run, specifying the desired paths and names
 //python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/imgstream.proto
 syntax = "proto3";
 

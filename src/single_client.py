@@ -1,23 +1,31 @@
 """Client for grpc requests."""
-import cv2
-import grpc
 import io
 import logging
-import imgstream_pb2_grpc as pb_rpc
-import imgstream_pb2 as pb
 import os
-import numpy as np
 import time
-
-from PIL import Image
 from pathlib import Path
 
-FF_ID = int('0')  # os.environ['FIRST_FRAME_ID'])
-LF_ID = int('367')  # os.environ['LAST_FRAME_ID'])
+import cv2
+import grpc
+import numpy as np
+from PIL import Image
+
+from utils import imgstream_pb2 as pb
+from utils import imgstream_pb2_grpc as pb_rpc
+from utils.helpers import str_to_float, str_to_int
+
+FF_ID = str_to_int(os.environ['FIRST_FRAME_ID'])
+LF_ID = str_to_int(os.environ['LAST_FRAME_ID'])
 F_IDS = list(range(FF_ID, LF_ID))
-FPS = float('30')  # os.environ['FPS'])
-VIDEO_DIR_PATH = '/home/adrian/Desktop'  # os.environ['VIDEO_DIR_PATH']
-RPC_SERVER = 'localhost:9999'  # os.environ['RPC_SERVER']
+FPS = str_to_float(os.environ['FPS'])
+VIDEO_DIR_PATH = os.environ['VIDEO_DIR_PATH']
+RPC_SERVER = os.environ['RPC_SERVER']
+RPC_PORT = os.environ['RPC_PORT']
+logging.basicConfig(level=logging.INFO)
+
+assert Path(VIDEO_DIR_PATH).is_dir(), f"The video dir path provided is not valid: {VIDEO_DIR_PATH=}. " \
+                                      f"Check value in .env file."
+_ = str_to_int(RPC_PORT)
 
 
 def run(image_ids: list):
@@ -29,10 +37,8 @@ def run(image_ids: list):
 
     vide_name = f'video{os.getpid()}.mp4'
     video_dir_path = VIDEO_DIR_PATH if VIDEO_DIR_PATH[-1] == "/" else VIDEO_DIR_PATH + "/"
-    assert Path(video_dir_path).is_dir(), f"The video dir path provided is not valid: {video_dir_path}." \
-                                          f"Check environment configuration in .env file."
 
-    with grpc.insecure_channel(RPC_SERVER) as channel:
+    with grpc.insecure_channel(RPC_SERVER + ":" + RPC_PORT) as channel:
         stub = pb_rpc.ImgStreamStub(channel)
 
         first_response = stub.stream(pb.Req(img_id=image_ids[0]))
@@ -57,10 +63,16 @@ def run(image_ids: list):
 
 
 def close(channel):
+    """
+    Close the stream channel on failure.
+    :param channel: The channel open.
+    :return: None.
+    """
     channel.close()
 
 
 if __name__ == "__main__":
     start = time.time()
     run(F_IDS)
-    print(time.time()-start)
+    logging.info(f'Done in {round(time.time()-start, 2)} seconds.')
+

@@ -1,17 +1,23 @@
 """Server listening for grpc requests."""
+import logging
 import os
-from concurrent import futures
 import threading
 import time
-import grpc
-import imgstream_pb2_grpc as pb_rpc
-import imgstream_pb2 as pb
+from concurrent import futures
 from pathlib import Path
 
-RPC_SERVER = 'localhost:9999'  # os.environ['RPC_SERVER']
-PORT = RPC_SERVER.split(":")[-1]
-SERVE_ON = f'0.0.0.0:{PORT}'
-FRAMES_DIR_PATH = '/home/adrian/PycharmProjects/grpc/frames'  # os.environ['FRAMES_DIR_PATH']
+import grpc
+
+from utils import imgstream_pb2 as pb
+from utils import imgstream_pb2_grpc as pb_rpc
+from utils.helpers import str_to_int
+
+RPC_SERVER = os.environ['RPC_SERVER']
+RPC_PORT = os.environ['RPC_PORT']
+_ = str_to_int(RPC_PORT)
+SERVE_ON = f'0.0.0.0:{RPC_PORT}'
+FRAMES_DIR_PATH = os.environ['FRAMES_DIR_PATH']
+logging.basicConfig(level=logging.INFO)
 
 
 class Listener(pb_rpc.ImgStreamServicer):
@@ -31,6 +37,11 @@ class Listener(pb_rpc.ImgStreamServicer):
 
     @staticmethod
     def retrieve_object_bytes(obj_path):
+        """
+        Retrieve bytes from an object path.
+        :param obj_path: The object path.
+        :return: The byte array.
+        """
 
         if '://' in obj_path:
             raise NotImplementedError
@@ -67,11 +78,11 @@ def serve_grpc(listen_on):
     server.start()
     try:
         while True:
-            print(f"Thread-count {threading.active_count()}, listening on {listen_on}")
+            logging.info(f"Thread-count {threading.active_count()}, listening on {listen_on}")
             time.sleep(10)
     except KeyboardInterrupt:
         server.stop(0)
-        print("Exited.")
+        logging.info("Exited.")
 
 
 if __name__ == "__main__":
