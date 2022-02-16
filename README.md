@@ -9,21 +9,21 @@ Serialize image -> transport -> deserialize image => combine all transported ima
 
 Notes:
 
-- The files are expected to be compressed. If messages are bigger than 1MB, the transport performance is affected.
+- The images are expected to be compressed. If messages are bigger than 1MB, the transport performance is affected.
 - cv2 builds the video from images. The workflow on the client is:   bytes -> PIL -> numpy array -> cv2.
 - The server opens the requested image as bytes (ignores compression) and sends it to client (protobuf).
-- Naming the output file is not implemented. At the moment the naming pattern is `video<PID-how-created-it>.mp4`
+- Naming the output file is not implemented. At the moment the naming pattern is `video<PID-who-created-it>.mp4`
 
 # Setup
 
-### Build the container image (used for both, server and client):
+### Build the container image:
 
 - Execute build.sh file (under Linux run `chmod +x build.sh && ./build.sh`)
 
 ### Environment config:
 
 - Set the required environment variables in a `config/.env` file. See the example file: `config/.env.example`
-- At the moment frames, are combined from `frames` folder, on the server host. Make sure the images are there.
+- At the moment frames are combined from `frames` folder (docker will map it in container). Make sure the images are there.
 
 ### Run the server:
 
@@ -36,7 +36,7 @@ Notes:
 
 # Usage
 
-The current implementation requires one mandatory update the `.env`:
+The current implementation requires one mandatory update in the `.env` file:
 
 - `RPC_SERVER` This value should be replaced with the IP or URL of the server.
 
