@@ -1,5 +1,7 @@
 version: "3.8"
 
+# If the server and client are on the same host, they need to communicate. Uncomment networks, comment ports
+
 services:
   rpc_server:
     image: "rpc_image"

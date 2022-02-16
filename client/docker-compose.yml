@@ -1,5 +1,7 @@
 version: "3.8"
 
+# If the server and client are on the same host, they need to communicate. Uncomment networks, comment ports.
+
 services:
   rpc_client:
     image: "rpc_image"
@@ -13,7 +15,7 @@ services:
       - ../output:/home/rpcuser/VideoFromFrames/output
 #    networks:
 #      - server_net
-    command: python src/single_client.py
+    command: python src/single_client.py # or change to multi_client.py to use multiprocessing
 
 #networks:
 #  server_net:
