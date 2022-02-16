@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  rpc_server:
+    image: "rpc_image"
+    env_file:
+      - ../config/.env
+    volumes:
+      - ../src/server.py:/home/rpcuser/VideoFromFrames/src/server.py
+      - ../src/utils:/home/rpcuser/VideoFromFrames/src/utils
+      - ../src/protos:/home/rpcuser/VideoFromFrames/src/protos
+      - ../frames:/home/rpcuser/VideoFromFrames/frames
+    ports:
+      - "7321:7321"
+#    networks:
+#      - net
+    command: python src/server.py
+
+#networks:
+#  net:
+#    driver: bridge

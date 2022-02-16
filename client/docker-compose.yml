@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  rpc_client:
+    image: "rpc_image"
+    env_file:
+      - ../config/.env
+    volumes:
+      - ../src/single_client.py:/home/rpcuser/VideoFromFrames/src/single_client.py
+      - ../src/multi_client.py:/home/rpcuser/VideoFromFrames/src/multi_client.py
+      - ../src/utils:/home/rpcuser/VideoFromFrames/src/utils
+      - ../src/protos:/home/rpcuser/VideoFromFrames/src/protos
+      - ../output:/home/rpcuser/VideoFromFrames/output
+#    networks:
+#      - server_net
+    command: python src/single_client.py
+
+#networks:
+#  server_net:
+#    external: true
