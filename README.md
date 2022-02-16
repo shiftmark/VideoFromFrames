@@ -34,6 +34,16 @@ Notes:
 - Navigate to `client` folder and run `docker-compose up`
 - Multiprocessing `multi_client.py` has been implemented for testing purposes. At the moment all processes are doing the same work.
 
+# Usage
+
+The current implementation requires one mandatory update the `.env`:
+
+- `RPC_SERVER` This value should be replaced with the IP or URL of the server.
+
+When starting the client, it will request the frames from the server, using the indexes set to `FIRST_FRAME_ID` and `LAST_FRAME_ID`
+If the last frame id is greater than the ids available, you will get an error but the video will be saved, up until the last available frame.
+The id is the number before the extension. See the `frames` folder.
+
 # Performance
 
 Without the network bottleneck:
