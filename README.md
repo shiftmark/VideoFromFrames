@@ -2,7 +2,10 @@
 
 Serialize image -> transport -> deserialize image => combine all transported images in a video file.
 
-![](diagram.png)
+| ![](diagram.png)  |
+|:-----------------:|
+
+
 
 Notes:
 
@@ -19,8 +22,8 @@ Notes:
 
 ### Environment config:
 
-- Set the required environment variables in an `config/.env` file. See the example file: `config/.env.example`
-- At the moment frames, are combined from folder `frames`, from the server host. Make sure the images are there. The filename pattern is `frame<id>.jpg`
+- Set the required environment variables in a `config/.env` file. See the example file: `config/.env.example`
+- At the moment frames, are combined from `frames` folder, on the server host. Make sure the images are there.
 
 ### Run the server:
 
